@@ -4,7 +4,7 @@
     "subTitle":"我是Jayvee 这是我的博客分享我的经历与感悟",
     "avatarUrl":"https://raw.githubusercontent.com/GJayvee/gjayvee.github.io/refs/heads/main/pingu_picture.webp",
     "faviconUrl":"https://raw.githubusercontent.com/GJayvee/gjayvee.github.io/refs/heads/main/pingu_picture.webp",
-    "email":"gjayvee@example.com",
+    "email":"2206224346@qq.com",
     "themeMode":"fix",
     "i18n":"CN",
     "GMEEK_VERSION":"last",
@@ -13,10 +13,10 @@
     "singlePage":["about","links","resource"],
     "exlink":{
         "项目":"https://github.com/GJayvee?tab=repositories",
-        "邮箱":"mailto:gjayvee@example.com"
+        "邮箱":"mailto:2206224346@qq.com"
     },
     "projects":{
         "myblog":{"url":"","desc":"我的个人博客"},
-        "dotfiles":{"url":"https://github.com/GJayvee","desc":"配置文件"}
+        "dotfiles":{"url":"https://github.com/GJayvee","desc":"杂乱"}
     }
 }
