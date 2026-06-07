@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset=utf-8>
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=5">
+    <meta name=description content="{{ blogBase['subTitle'] }}">
+    {{ blogBase['allHead'] }}
+    <link rel="shortcut icon" href="{{ blogBase['faviconUrl'] }}">
+    <link rel=icon type=image/png href="{{ blogBase['avatarUrl'] }}" sizes=192x192>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel=stylesheet href=/css/style.css>
+    <link rel=stylesheet href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% block style %}{% endblock %}
+    {% block head %}{% endblock %}
+</head>
+<body class="max-width mx-auto px3 ltr">
+<div class="content index py4 h-card">
+    <header id=header>
+        <a class="u-url u-uid" href="{{ blogBase['homeUrl'] }}">
+            <img id=logo alt class=u-logo src="{{ blogBase['avatarUrl'] }}">
+            <div id=title><h1 class=p-name>{{ blogBase['displayTitle'] }}</h1></div>
+        </a>
+        <div id=nav>
+            <ul>
+                <li class=icon><a href=# aria-label=菜单><i class="fa-solid fa-bars fa-2x"></i></a></li>
+                <li><a href="{{ blogBase['homeUrl'] }}">首页</a></li>
+                {% for num in blogBase['singeListJson'] %}
+                <li><a href="{{ blogBase['homeUrl'] }}/{{ blogBase['singeListJson'][num]['labels'][0] }}.html">{{ blogBase['singeListJson'][num]['postTitle'] }}</a></li>
+                {% endfor %}
+                {% for key, value in blogBase['exlink'].items() %}
+                <li><a target=_blank rel=noopener href="{{ value }}">{{ key }}</a></li>
+                {% endfor %}
+                <li><a href="{{ blogBase['homeUrl'] }}/tag.html">标签</a></li>
+            </ul>
+        </div>
+    </header>
+    <section id=about class=p-note><p>{{ blogBase['subTitle'] }}</p></section>
+    {% block content %}{% endblock %}
+    <footer id=footer>
+        <div class=footer-left>Copyright &copy; <span id="copyrightYear"></span> {{ blogBase['title'] }}</div>
+        <div class=footer-right>
+            <nav><ul>
+                <li><a href="{{ blogBase['homeUrl'] }}">首页</a></li>
+                {% for num in blogBase['singeListJson'] %}
+                <li><a href="{{ blogBase['homeUrl'] }}/{{ blogBase['singeListJson'][num]['labels'][0] }}.html">{{ blogBase['singeListJson'][num]['postTitle'] }}</a></li>
+                {% endfor %}
+            </ul></nav>
+        </div>
+    </footer>
+</div>
+<script src=/js/main.js></script>
+{% block script %}{% endblock %}
+<script>
+document.getElementById("copyrightYear").innerHTML = new Date().getFullYear();
+</script>
+</body>
+</html>

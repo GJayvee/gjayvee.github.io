@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}{{ blogBase['title'] }}{% endblock %}
+{% block head %}
+<meta property=og:type content=website>
+<meta property=og:title content="{{ blogBase['title'] }}">
+<meta property=og:url content="{{ blogBase['homeUrl'] }}">
+{{ blogBase['indexStyle'] }}
+{% endblock %}
+{% block style %}
+<style>
+.tagcloud a{display:inline-block;margin:5px;color:#ebdbb2;text-decoration:none}
+.tagcloud a:hover{color:#fe8019}
+.project-list{padding:0;list-style:none}
+.project-list .project-item{margin-bottom:5px}
+.project-list .project-item p{display:inline}
+</style>
+{% endblock %}
+
+{% block content %}
+<section id=writing>
+    <span class=h1><a href="{{ blogBase['homeUrl'] }}/archives/">文章</a></span>
+    <span class=h2>标签</span>
+    <span class="widget tagcloud"></span>
+    <span class=h2>最新发布</span>
+    <ul class=post-list>
+    {% for num in postListJson %}
+        <li class=post-item>
+            <div class=meta><time datetime="{{ postListJson[num]['createdDate'] }}">{{ postListJson[num]['createdDate'] }}</time></div>
+            <span><a href="{{ postListJson[num]['postUrl']|e }}">{{ postListJson[num]['postTitle']|e }}</a></span>
+        </li>
+    {% endfor %}
+    </ul>
+    {% if blogBase['prevUrl']!='disabled' or blogBase['nextUrl']!='disabled' %}
+    <div class=pagination>
+        {% if blogBase['prevUrl']!='disabled' %}<a href="{{ blogBase['homeUrl'] }}{{ blogBase['prevUrl'] }}"><i class="fa-solid fa-angle-left"></i></a>{% endif %}
+        <span class=page-number>第 {{ blogBase['currentPage'] }} 页</span>
+        {% if blogBase['nextUrl']!='disabled' %}<a href="{{ blogBase['homeUrl'] }}{{ blogBase['nextUrl'] }}"><i class="fa-solid fa-angle-right"></i></a>{% endif %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block script %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var tags = {};
+    {% for num in postListJson %}
+    {% for label in postListJson[num]['labels'] %}
+    if(!tags['{{ label|e }}']) tags['{{ label|e }}'] = 0;
+    tags['{{ label|e }}']++;
+    {% endfor %}
+    {% endfor %}
+    var cloud = document.querySelector('.tagcloud');
+    if(cloud) {
+        var html = '';
+        for(var t in tags) {
+            html += '<a href="{{ blogBase['homeUrl'] }}/tag.html#' + encodeURI(t) + '">' + t + '</a> ';
+        }
+        cloud.innerHTML = html;
+    }
+});
+</script>
+{{ blogBase['indexScript'] }}
+{% endblock %}

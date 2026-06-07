@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}{{ blogBase['postTitle'] }} - {{ blogBase['title'] }}{% endblock %}
+{% block head %}
+<meta property=og:type content=article>
+<meta property=og:title content="{{ blogBase['postTitle'] }}">
+<meta property=og:url content="{{ blogBase['postUrl'] }}">
+<meta property=og:image content="{{ blogBase['ogImage'] }}">
+{% if blogBase['highlight']==1 %}<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />{% endif %}
+{{ blogBase['head'] }}
+{% endblock %}
+{% block style %}
+<style>
+article header .posttitle{margin-top:0;margin-bottom:0;text-transform:none;font-size:1.5em;line-height:1.25}
+article header .meta{margin-top:0;margin-bottom:1rem}
+article header .meta *{color:#bdae93;font-size:.85rem}
+article .content h2:before{position:absolute;top:-4px;left:-1rem;color:#fe8019;content:"#";font-weight:700;font-size:1.2rem}
+article .content{position:relative}
+article .content h2{position:relative;padding-left:1rem}
+article .content img{display:block;margin:auto;max-width:100%;height:auto}
+article .content blockquote{margin:1rem 10px;padding:.5em 10px;color:#98971a;font-weight:700}
+article .content blockquote:before{margin-right:.25em;color:#98971a;content:"\201C";vertical-align:-.4em;font-size:2em;line-height:.1em}
+.highlight{overflow-x:auto;margin:1rem 0;padding:10px 15px;border-radius:4px;background:#313131;font-family:"Sarasa Mono SC","Courier New",monospace}
+pre{overflow-x:auto;padding:10px 15px;border:1px dotted #504945;border-radius:4px;font-size:13px;font-family:"Sarasa Mono SC","Courier New",monospace;line-height:22px}
+code{padding:0 5px;border:1px dotted #504945;border-radius:2px}
+.markdown-body{color:#ebdbb2}
+.markdown-body a{color:#ebdbb2}
+.markdown-body a:hover{color:#fe8019}
+</style>
+{{ blogBase['style'] }}
+{% endblock %}
+
+{% block content %}
+<article>
+    <header>
+        <h1 class=posttitle>{{ blogBase['postTitle'] }}</h1>
+    </header>
+    <div class="content markdown-body" id="postBody">{{ blogBase['postBody'] }}</div>
+</article>
+<div style="font-size:small;margin-top:8px;float:right;">{{ blogBase['bottomText'] }}</div>
+{% if blogBase['needComment']==1 %}
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">{{ i18n['comments'] }}</button>
+<div class="comments" id="comments"></div>
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script>
+{% if blogBase['needComment']==1 %}
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","{{ blogBase['repoName'] }}");
+    script.setAttribute("issue-term","title");
+    script.setAttribute("theme","dark-blue");
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+    int=self.setInterval("iFrameLoading()",200);
+}
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+        }
+    }
+}
+{%- endif %}
+</script>
+{{ blogBase['script'] }}
+{% endblock %}
