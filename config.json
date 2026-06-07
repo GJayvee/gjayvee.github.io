@@ -10,5 +10,13 @@
     "GMEEK_VERSION":"last",
     "onePageListNum":15,
     "needComment":0,
-    "singlePage":[]
+    "singlePage":["about","links","resource"],
+    "exlink":{
+        "项目":"https://github.com/GJayvee?tab=repositories",
+        "邮箱":"mailto:gjayvee@example.com"
+    },
+    "projects":{
+        "myblog":{"url":"","desc":"我的个人博客"},
+        "dotfiles":{"url":"https://github.com/GJayvee","desc":"配置文件"}
+    }
 }
