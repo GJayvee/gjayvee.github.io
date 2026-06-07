@@ -18,7 +18,7 @@
 
 {% block content %}
 <section id=writing>
-    <span class=h1><a href="{{ blogBase['homeUrl'] }}/archives/">文章</a></span>
+    <span class=h1><a href="{{ blogBase['homeUrl'] }}">文章</a></span>
     <span class=h2>标签</span>
     <span class="widget tagcloud"></span>
     <span class=h2>最新发布</span>
@@ -33,7 +33,6 @@
     {% if blogBase['prevUrl']!='disabled' or blogBase['nextUrl']!='disabled' %}
     <div class=pagination>
         {% if blogBase['prevUrl']!='disabled' %}<a href="{{ blogBase['homeUrl'] }}{{ blogBase['prevUrl'] }}"><i class="fa-solid fa-angle-left"></i></a>{% endif %}
-        <span class=page-number>第 {{ blogBase['currentPage'] }} 页</span>
         {% if blogBase['nextUrl']!='disabled' %}<a href="{{ blogBase['homeUrl'] }}{{ blogBase['nextUrl'] }}"><i class="fa-solid fa-angle-right"></i></a>{% endif %}
     </div>
     {% endif %}

@@ -24,11 +24,11 @@
             <ul>
                 <li class=icon><a href=# aria-label=菜单><i class="fa-solid fa-bars fa-2x"></i></a></li>
                 <li><a href="{{ blogBase['homeUrl'] }}">首页</a></li>
-                {% for num in blogBase['singeListJson'] %}
-                <li><a href="{{ blogBase['homeUrl'] }}/{{ blogBase['singeListJson'][num]['labels'][0] }}.html">{{ blogBase['singeListJson'][num]['postTitle'] }}</a></li>
-                {% endfor %}
                 {% for key, value in blogBase['exlink'].items() %}
                 <li><a target=_blank rel=noopener href="{{ value }}">{{ key }}</a></li>
+                {% endfor %}
+                {% for num in blogBase['singeListJson'] %}
+                <li><a href="{{ blogBase['homeUrl'] }}/{{ blogBase['singeListJson'][num]['labels'][0] }}.html">{{ blogBase['singeListJson'][num]['postTitle'] }}</a></li>
                 {% endfor %}
                 <li><a href="{{ blogBase['homeUrl'] }}/tag.html">标签</a></li>
             </ul>
@@ -41,9 +41,7 @@
         <div class=footer-right>
             <nav><ul>
                 <li><a href="{{ blogBase['homeUrl'] }}">首页</a></li>
-                {% for num in blogBase['singeListJson'] %}
-                <li><a href="{{ blogBase['homeUrl'] }}/{{ blogBase['singeListJson'][num]['labels'][0] }}.html">{{ blogBase['singeListJson'][num]['postTitle'] }}</a></li>
-                {% endfor %}
+                <li><a href="{{ blogBase['homeUrl'] }}/tag.html">标签</a></li>
             </ul></nav>
         </div>
     </footer>
