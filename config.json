@@ -3,7 +3,7 @@
     "displayTitle":"Jayvee Blog",
     "subTitle":"我是Jayvee 这是我的博客分享我的经历与感悟",
     "avatarUrl":"https://raw.githubusercontent.com/GJayvee/gjayvee.github.io/refs/heads/main/pingu_picture.webp",
-    "faviconUrl":"https://raw.githubusercontent.com/GJayvee/gjayvee.github.io/refs/heads/main/pingu_picture.webp",
+    "faviconUrl":"/favicon.ico",
     "email":"2206224346@qq.com",
     "themeMode":"fix",
     "i18n":"CN",
