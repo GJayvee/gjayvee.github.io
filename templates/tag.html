@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}{{ blogBase['title'] }} - 标签{% endblock %}
+{% block head %}
+<meta name=description content="{{ blogBase['title'] }} search page">
+{{ blogBase['indexStyle'] }}
+{% endblock %}
+{% block style %}
+<style>
+.tag-list{padding:0;list-style:none;margin-bottom:16px}
+.tag-list li{display:inline-block;margin:4px;padding:4px 10px;border:1px solid #504945;border-radius:3px;cursor:pointer;color:#ebdbb2;font-size:14px}
+.tag-list li:hover{color:#fe8019;border-color:#fe8019}
+.tag-list li .count{color:#a89984;margin-left:4px;font-size:12px}
+.tag-list li.active{color:#fe8019;border-color:#fe8019}
+.post-list{padding:0}
+.post-list .post-item{margin-bottom:1rem;margin-left:0;list-style-type:none}
+.post-list .post-item .meta{color:#a89984;font-size:14px;display:block;min-width:100px}
+@media(min-width:480px){
+  .post-list .post-item{display:flex;margin-bottom:5px}
+  .post-list .post-item .meta{margin-right:16px;text-align:left}
+}
+.post-list .post-item a{color:#ebdbb2;text-decoration:none}
+.post-list .post-item a:hover{color:#fe8019}
+.notFind{display:none;font-size:24px;margin:8px;color:#a89984}
+.search-box{margin-bottom:16px}
+.search-box input{padding:6px 10px;width:200px;border:1px solid #504945;border-radius:3px;background:#282828;color:#ebdbb2;font-size:14px}
+.search-box input:focus{border-color:#fe8019;outline:none}
+.search-box button{padding:6px 12px;border:1px solid #fe8019;border-radius:3px;background:#fe8019;color:#282828;cursor:pointer;font-size:14px}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class=search-box>
+    <input type=search id=searchInput placeholder="搜索文章...">
+    <button onclick="searchShow()">搜索</button>
+</div>
+<ul class=tag-list id=taglabel></ul>
+<ul class=post-list id=postlist></ul>
+<div class=notFind id=notfind>未找到</div>
+{% endblock %}
+
+{% block script %}
+<script>
+var tagList=[], labelsCount={}, jsonData='';
+var req=new XMLHttpRequest();
+req.open("GET","postList.json");
+req.responseType='text';
+req.send();
+req.onload=function(){
+    jsonData=JSON.parse(req.response);
+    showList();
+    setClassDisplay(decodeURI(window.location.hash.slice(1)));
+}
+
+function showList(){
+    var taglabel=document.getElementById("taglabel");
+    labelsCount["All"]=0;
+    for(var key in jsonData){
+        if(key!='labelColorDict' && Array.isArray(jsonData[key]['labels'])){
+            labelsCount["All"]++;
+            for(var li=0;li<jsonData[key]['labels'].length;li++){
+                var label=jsonData[key]['labels'][li];
+                labelsCount[label]=(labelsCount[label]||0)+1;
+            }
+        }
+    }
+    var sorted=Object.keys(labelsCount).sort(function(a,b){return labelsCount[b]-labelsCount[a]});
+    for(var i=0;i<sorted.length;i++){
+        tagList.push(sorted[i]);
+        var li=document.createElement("li");
+        li.innerHTML=sorted[i]+' <span class=count>'+labelsCount[sorted[i]]+'</span>';
+        li.onclick=function(){updateShowTag(this.textContent.split(' ')[0])};
+        taglabel.appendChild(li);
+    }
+    for(var key in jsonData){
+        if(key!='labelColorDict'){
+            var li=document.createElement("li");
+            li.className='post-item';
+            li.setAttribute('data-labels',(jsonData[key]['labels']||[]).join(' '));
+            li.innerHTML='<div class=meta>'+jsonData[key]['createdDate']+'</div><span><a href="'+jsonData[key]['postUrl']+'">'+jsonData[key]['postTitle']+'</a></span>';
+            document.getElementById('postlist').appendChild(li);
+        }
+    }
+}
+
+function updateShowTag(label){
+    window.location.hash='#'+encodeURI(label);
+    setClassDisplay(label);
+}
+
+function setClassDisplay(label){
+    document.title=label+' - {{ blogBase['title'] }}';
+    var items=document.getElementById('postlist').getElementsByClassName('post-item');
+    var lis=document.getElementById('taglabel').getElementsByTagName('li');
+    for(var i=0;i<lis.length;i++){
+        var t=lis[i].textContent.split(' ')[0];
+        lis[i].className=t==label?'active':'';
+    }
+    var found=0;
+    if(label=='All'){
+        for(var i=0;i<items.length;i++){items[i].style.display='';found++}
+    } else {
+        for(var i=0;i<items.length;i++){
+            var labels=items[i].getAttribute('data-labels');
+            if(labels&&labels.indexOf(label)!=-1){items[i].style.display='';found++}
+            else{items[i].style.display='none'}
+        }
+    }
+    document.getElementById('notfind').style.display=found?'none':'block';
+}
+function searchShow(){
+    var q=document.getElementById('searchInput').value;
+    if(!q)return;
+    window.location.hash='#'+encodeURI(q);
+    document.title=q+' - {{ blogBase['title'] }}';
+    var items=document.getElementById('postlist').getElementsByClassName('post-item');
+    var found=0;
+    for(var i=0;i<items.length;i++){
+        var title=items[i].querySelector('a').textContent.toUpperCase();
+        items[i].style.display=title.indexOf(q.toUpperCase())!=-1?'':'none';
+        if(title.indexOf(q.toUpperCase())!=-1)found++;
+    }
+    document.getElementById('notfind').style.display=found?'none':'block';
+    if(!found)document.getElementById('notfind').innerHTML='未找到 "'+q+'"';
+}
+if(window.location.hash){
+    window.onload=function(){setClassDisplay(decodeURI(window.location.hash.slice(1)))};
+}
+</script>
+{{ blogBase['indexScript'] }}
+{% endblock %}
